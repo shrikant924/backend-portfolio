@@ -1,15 +1,44 @@
 package com.quiz_app.quiz_app.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.quiz_app.quiz_app.controller.service.StudentService;
+import com.quiz_app.quiz_app.model.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api")
 public class HelloController {
 
+    @Autowired
+    private StudentService studentService;
+
+
     @GetMapping("hello")
     public String greet(){
         return "Hello world";
     }
+
+    @GetMapping("/getStudents")
+    public ResponseEntity<List<Student>> getAllStudents(){
+       return studentService.findAll();
+    }
+
+    @GetMapping("/getStudent/{Id}")
+    public Student getStudent(@PathVariable("Id") int id){
+        return studentService.findById(id).getBody();
+    }
+
+    @GetMapping("/getStudentByName/{name}")
+    public ResponseEntity<Student> findStudentByName(@PathVariable("name") String name){
+        return studentService.findByName(name);
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<String> saveStudent(@RequestBody Student student){
+        return  studentService.save(student);
+    }
+
 }
