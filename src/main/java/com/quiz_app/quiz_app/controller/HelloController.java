@@ -2,12 +2,14 @@ package com.quiz_app.quiz_app.controller;
 
 import com.quiz_app.quiz_app.controller.service.StudentService;
 import com.quiz_app.quiz_app.model.Student;
+import com.quiz_app.quiz_app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("api")
 public class HelloController {
@@ -39,6 +41,11 @@ public class HelloController {
     @PostMapping("/save")
     public ResponseEntity<String> saveStudent(@RequestBody Student student){
         return  studentService.save(student);
+    }
+
+    @PostMapping("register")
+    public ResponseEntity<String> registerUser(@RequestBody User user){
+        return studentService.saveUser(user);
     }
 
 }

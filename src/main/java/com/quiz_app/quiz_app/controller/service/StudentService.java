@@ -1,7 +1,9 @@
 package com.quiz_app.quiz_app.controller.service;
 
 import com.quiz_app.quiz_app.controller.repo.StudentRepo;
+import com.quiz_app.quiz_app.controller.repo.UserRepo;
 import com.quiz_app.quiz_app.model.Student;
+import com.quiz_app.quiz_app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,9 @@ public class StudentService {
 
     @Autowired
     private StudentRepo studentRepo;
+
+    @Autowired
+    private UserRepo userRepo;
 
     public ResponseEntity<List<Student>> findAll() {
         return new ResponseEntity<>(studentRepo.findAll(), HttpStatus.OK);
@@ -29,6 +34,11 @@ public class StudentService {
 
     public ResponseEntity<String> save(Student student) {
         studentRepo.save(student);
+        return new ResponseEntity<>("success",HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<String> saveUser(User user) {
+        userRepo.save(user);
         return new ResponseEntity<>("success",HttpStatus.CREATED);
     }
 }
