@@ -43,9 +43,18 @@ public class HelloController {
         return  studentService.save(student);
     }
 
-    @PostMapping("register")
+    @PutMapping("register")
     public ResponseEntity<String> registerUser(@RequestBody User user){
         return studentService.saveUser(user);
     }
 
+    @PostMapping("login")
+    public ResponseEntity<String> doLogin(@RequestBody User user){
+        return studentService.doLogin(user.getEmail() , user.getPassword());
+    }
+
+    @GetMapping("get/{id}")
+    public ResponseEntity<User> getUserDetails(@PathVariable int id){
+        return studentService.findUserById(id);
+    }
 }
