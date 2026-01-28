@@ -38,6 +38,7 @@ public class StudentService {
     }
 
     public ResponseEntity<String> saveUser(User user) {
+
         userRepo.save(user);
         return new ResponseEntity<>("success", HttpStatus.CREATED);
     }
