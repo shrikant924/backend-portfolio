@@ -1,10 +1,17 @@
 package com.quiz_app.quiz_app.controller;
 
+import com.quiz_app.quiz_app.model.dto.UserDto;
+import com.quiz_app.quiz_app.service.JwtService;
 import com.quiz_app.quiz_app.service.StudentService;
 import com.quiz_app.quiz_app.model.Student;
 import com.quiz_app.quiz_app.model.User;
+import com.quiz_app.quiz_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +24,14 @@ public class HelloController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @GetMapping("hello")
     public String greet(){
@@ -44,8 +59,8 @@ public class HelloController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<String> registerUser(@RequestBody User user){
-        return studentService.saveUser(user);
+    public UserDto registerUser(@RequestBody User user){
+        return userService.saveUser(user);
     }
 
     @PutMapping("update")
@@ -55,8 +70,16 @@ public class HelloController {
 
 
     @PostMapping("login")
-    public ResponseEntity<String> doLogin(@RequestBody User user){
-        return studentService.doLogin(user.getEmail() , user.getPassword());
+    public String doLogin(@RequestBody User user){
+
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+
+        if(authentication.isAuthenticated())
+            return jwtService.generateToken(user.getUsername());
+        else
+            return "Login Failed";
+
     }
 
     @GetMapping("get/{id}")
