@@ -24,8 +24,21 @@ public class Products {
     private Integer reviews;
     private String category;
     private Integer stock;
-    private String image;
+    private String imageName;
+    private String imageType;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] imageData;
 
     @Column(length = 1000)
     private String description;
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
 }
